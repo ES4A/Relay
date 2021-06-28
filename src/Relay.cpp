@@ -19,7 +19,7 @@ Relay::Relay(uint8_t changePin, bool initState){
     pinMode(changePin, OUTPUT);
 }
 
-Relay::Relay(uint8_t activePin, uint8_t resetPin){
+Relay::Relay(uint8_t activePin, uint8_t resetPin, bool initState){
     relayActivePin = activePin;
     relayResetPin = resetPin;
     Relaytype = bistable;
@@ -28,7 +28,7 @@ Relay::Relay(uint8_t activePin, uint8_t resetPin){
 }
 
 void Relay::tick(){
-    if((millis() - startChange < switchTime) && currentState != newState){
+    if((millis() - startChange > switchTime) && currentState != newState){
         if(Relaytype == powerSurge){
             if(activeLow){
                 digitalWrite(relayActivePin, HIGH);
@@ -62,45 +62,51 @@ void Relay::tick(){
 }
 
 void Relay::setState(bool setNewState){
-    startChange = millis();
-    newState = setNewState;
-    if(Relaytype == normal){
-        if(activeLow){
-            digitalWrite(relayActivePin, !setNewState);
+    if(currentState != setNewState && newState == currentState){
+        startChange = millis();
+        newState = setNewState;
+        if(Relaytype == normal){
+            if(activeLow){
+                digitalWrite(relayActivePin, !setNewState);
+            }
+            else{
+                digitalWrite(relayActivePin, setNewState);
+            }
+            currentState = setNewState;
         }
-        else{
-            digitalWrite(relayActivePin, setNewState);
-        }
-        currentState = setNewState;
-    }
 
-    if(Relaytype == bistable){
-        if(activeLow){
-            if(newState){
+        if(Relaytype == bistable){
+            if(activeLow){
+                if(newState){
+                    digitalWrite(relayActivePin, LOW);
+                }
+                else{
+                    digitalWrite(relayResetPin, LOW);
+                }
+            }
+            else{
+                if(newState){
+                    digitalWrite(relayActivePin, HIGH);
+                }
+                else{
+                    digitalWrite(relayResetPin, HIGH);
+                }
+            }
+        }
+
+        if(Relaytype == powerSurge){
+            if(activeLow){
                 digitalWrite(relayActivePin, LOW);
             }
             else{
-                digitalWrite(relayResetPin, LOW);
-            }
-        }
-        else{
-            if(newState){
                 digitalWrite(relayActivePin, HIGH);
             }
-            else{
-                digitalWrite(relayResetPin, HIGH);
-            }
         }
     }
+}
 
-    if(Relaytype == powerSurge){
-        if(activeLow){
-            digitalWrite(relayActivePin, LOW);
-        }
-        else{
-            digitalWrite(relayActivePin, HIGH);
-        }
-    }
+bool Relay::getState(){
+    return currentState;
 }
 
 void Relay::setActiveLow(bool newActiveLow){
