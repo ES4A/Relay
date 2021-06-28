@@ -1,7 +1,7 @@
 #include <Arduino.h>
 #include <Relay.h>
 
-Relay relay1(1, 2); //init bistable Relay
+Relay relay1(1, 2, false); //init bistable Relay
 
 long lastChange;
 
