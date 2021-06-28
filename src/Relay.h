@@ -24,10 +24,11 @@
 			Relay();
 			Relay(uint8_t activePin);
             Relay(uint8_t changePin, bool initState);
-			Relay(uint8_t activePin, uint8_t resetPin);
+			Relay(uint8_t activePin, uint8_t resetPin, bool initState);
 		
             void tick();
             void setState(bool newState);
+			bool getState();
             void setActiveLow(bool newActiveLow);
             void setSwitchTime(uint16_t newTime);
 	
