@@ -1,4 +1,17 @@
 #include <Arduino.h>
 #include <Relay.h>
 
-Relay rel1(1, 2);
+Relay relay1(1, 2); //init bistable Relay
+
+long lastChange;
+
+void setup(){
+
+}
+
+void loop(){
+    relay1.tick();
+    if(millis() - lastChange > 1000){
+        relay1.toggle();
+    }
+}
