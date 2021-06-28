@@ -5,5 +5,5 @@ A Library to control different types of relays
 
 ```CPP
 #include <Arduino.h>
-#include <Relay.h>
+#include <relay.h>
 ```
