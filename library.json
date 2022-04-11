@@ -1,11 +1,20 @@
 {
   "name": "Relay",
+  "version": "1.0.0",
   "keywords": "arduino, relay, bistable relay",
   "description": "A Library to control different types of relays.",
   "repository": {
     "type": "git",
     "url": "https://github.com/ES4A/Relay"
   },
+  "authors":
+    [
+      {
+        "name": "ES4A",
+        "email": "info@es4a.de",
+        "url": "https://es4a.com"
+      }
+    ],
   "frameworks": "arduino",
   "platforms": "*"
 }
